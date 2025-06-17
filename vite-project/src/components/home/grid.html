@@ -1,0 +1,152 @@
+<div class="flex flex-col divide-y divide-gray-300">
+
+  <!-- Hero Section -->
+  <section class="min-h-[50vh] p-12 bg-white flex flex-col justify-center items-center text-center">
+    <h1 class="text-4xl font-bold mb-4 text-blue-600">Welcome to Sample</h1>
+    <p class="text-gray-700 max-w-xl">A signal-driven app powered by hypermedia and modern frontend tools. Click below to get started.</p>
+    <button class="mt-6 px-6 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+      Get Started
+    </button>
+  </section>
+
+  <section
+    class="min-h-[50vh] p-12 bg-gray-50"
+    data-signals="{ activeTab: 'input', checkboxes: { checkbox1: false, checkbox2: false, checkbox3: false } }"
+  >
+    <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">Core Features</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+
+      <!-- Live Signals -->
+      <div class="bg-white p-6 shadow rounded text-left flex flex-col justify-between min-h-[32rem]" data-signals>
+        <div>
+          <h3 class="text-xl font-semibold mb-2">Live Signals</h3>
+          <p class="text-gray-600 mb-4">Real-time data binding using Datastar’s signal-based framework.</p>
+
+          <!-- Tabs -->
+          <div role="tablist" class="flex justify-start mb-4 space-x-4 border-b border-gray-200">
+            <button
+              role="tab"
+              class="px-3 py-1 -mb-px transition-colors"
+              :class="$activeTab === 'input'
+                ? 'text-blue-600 font-semibold border-b-2 border-blue-600'
+                : 'text-gray-600 hover:text-gray-800'"
+              data-on-click="$activeTab = 'input'"
+            >
+              Input
+            </button>
+            <button
+              role="tab"
+              class="px-3 py-1 -mb-px transition-colors"
+              :class="$activeTab === 'checkbox'
+                ? 'text-blue-600 font-semibold border-b-2 border-blue-600'
+                : 'text-gray-600 hover:text-gray-800'"
+              data-on-click="$activeTab = 'checkbox'"
+            >
+              Checkbox
+            </button>
+          </div>
+
+          <!-- Tab Content -->
+          <div class="mt-2 space-y-4">
+            <div data-show="$activeTab === 'input'" class="space-y-2">
+              <input
+                data-bind-input
+                class="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="Input example…"
+              />
+              <div class="text-gray-700" data-text="$input">
+                This text will be replaced with the contents of the input signal.
+              </div>
+            </div>
+
+            <div data-show="$activeTab === 'checkbox'" class="space-y-2">
+              <label class="flex items-center space-x-2">
+                <input type="checkbox" data-bind-checkboxes.checkbox1 class="form-checkbox h-5 w-5 text-blue-600" />
+                <span class="text-gray-700">Checkbox 1</span>
+              </label>
+              <label class="flex items-center space-x-2">
+                <input type="checkbox" data-bind-checkboxes.checkbox2 class="form-checkbox h-5 w-5 text-blue-600" />
+                <span class="text-gray-700">Checkbox 2</span>
+              </label>
+              <label class="flex items-center space-x-2">
+                <input type="checkbox" data-bind-checkboxes.checkbox3 class="form-checkbox h-5 w-5 text-blue-600" />
+                <span class="text-gray-700">Checkbox 3</span>
+              </label>
+
+              <button
+                class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                data-on-click="@toggleAll('checkboxes.*')"
+              >
+                Toggle All
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz API -->
+      <div class="bg-white p-6 shadow rounded text-left flex flex-col justify-between min-h-[32rem]">
+        <div>
+          <h3 class="text-xl font-semibold mb-2">Quiz API</h3>
+          <p class="text-gray-600 mb-4">Fetch dynamic questions and instantly track responses.</p>
+
+          <div
+            class="bg-white rounded-lg p-4 border border-gray-200"
+            data-signals="{response: '', answer: ''}"
+            data-computed-correct="$response.toLowerCase() == $answer"
+          >
+            <div id="question" class="text-lg font-semibold text-center mb-2"></div>
+
+            <div class="flex flex-col gap-2 mb-2">
+              <button
+                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+                data-on-click="@get('http://127.0.0.1:8000/quiz')"
+              >
+                Fetch a Question
+              </button>
+
+              <button
+                class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition"
+                data-show="$answer != ''"
+                data-on-click="$response = prompt('Answer:') ?? ''; @post('http://127.0.0.1:8000/quiz')"
+              >
+                BUZZ
+              </button>
+            </div>
+
+            <div class="text-center" data-show="$response != ''">
+              <p>You answered <span class="font-medium" data-text="$response"></span>.</p>
+              <p data-show="$correct" class="text-green-600 font-bold mt-1">That is correct ✅</p>
+              <p data-show="!$correct" class="text-red-600 mt-1">
+                The correct answer is “<span data-text="$answer" class="font-semibold"></span>” 🤷
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modular UI -->
+      <div class="bg-white p-6 shadow rounded text-left flex flex-col justify-between min-h-[32rem]">
+        <div>
+          <h3 class="text-xl font-semibold mb-2">Modular UI</h3>
+          <p class="text-gray-600">Easily create and reuse components like navbars and footers.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- Contact Section -->
+<section class="min-h-[50vh] p-12 bg-white text-center">
+  <h2 class="text-3xl font-bold mb-6 text-gray-800">Get in Touch</h2>
+  <p class="text-gray-600 max-w-xl mx-auto mb-6">
+    Have questions or feedback? We’d love to hear from you. Reach out via email or follow us on social media.
+  </p>
+  <div class="space-x-4">
+    <a href="mailto:support@datastar.app" class="text-blue-500 hover:underline">Email Support</a>
+    <a href="#" class="text-blue-500 hover:underline">Twitter</a>
+    <a href="#" class="text-blue-500 hover:underline">GitHub</a>
+  </div>
+</section>
